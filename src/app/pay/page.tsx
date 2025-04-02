@@ -1,7 +1,7 @@
 import Pay from "./Pay";
 
 const PayPage = async () => {
-  const res = await fetch("http://localhost:3001/session", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
     method: "POST",
     body: JSON.stringify({
       amount: { value: 1000, currency: "USD" },
