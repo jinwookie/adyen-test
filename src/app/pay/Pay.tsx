@@ -21,36 +21,46 @@ const Pay = ({ sessionData }: Props) => {
   console.log(sessionData);
 
   useEffect(() => {
-    const config: CoreConfiguration = {
-      environment: "test",
-      session: {
-        id: sessionData.id,
-        sessionData: sessionData.sessionData,
-      },
-      clientKey: process.env.NEXT_PUBLIC_CHECKOUT_API_KEY,
-      countryCode: "US",
-      amount: {
-        value: 1000,
-        currency: "USD",
-      },
-      locale: "en-US",
-      analytics: {
-        enabled: false,
-      },
-      onSubmit: (state, component) => {
-        console.log(state);
-        component.submit();
-      },
-    };
     const initAdyen = async () => {
+      const config: CoreConfiguration = {
+        environment: "test",
+        session: {
+          id: sessionData.id,
+          sessionData: sessionData.sessionData,
+        },
+        clientKey: process.env.NEXT_PUBLIC_CHECKOUT_API_KEY,
+        countryCode: "US",
+        amount: {
+          value: 1000,
+          currency: "USD",
+        },
+        locale: "en-US",
+        analytics: {
+          enabled: false,
+        },
+        onPaymentCompleted: (state, component) => {
+          console.log("completed", state);
+        },
+        onPaymentFailed: (state, component) => {
+          console.log("failed", state);
+        },
+      };
+
       const checkout = await AdyenCheckout(config);
 
       const cardConfig: CardConfiguration = {
-        showPayButton: false,
+        showPayButton: true,
+        payButton: (options) => {
+          return <button>Pay</button>;
+        },
       };
 
       const applePayConfig: ApplePayConfiguration = {
         showPayButton: true,
+        configuration: {
+          merchantName: "AdyenOrg",
+          merchantId: "merchant.com.adyen.test",
+        },
       };
 
       const card = new Card(checkout, cardConfig);
@@ -61,7 +71,7 @@ const Pay = ({ sessionData }: Props) => {
     };
 
     initAdyen();
-  }, []);
+  }, [sessionData]);
   return (
     <div>
       <h1>Pay</h1>
