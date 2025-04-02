@@ -7,6 +7,8 @@ import {
   Card,
   CardConfiguration,
   CoreConfiguration,
+  GooglePay,
+  GooglePayConfiguration,
 } from "@adyen/adyen-web";
 import "@adyen/adyen-web/styles/adyen.css";
 import { useEffect, useRef } from "react";
@@ -18,6 +20,8 @@ type Props = {
 const Pay = ({ sessionData }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const applePayContainerRef = useRef<HTMLDivElement>(null);
+  const googlePayContainerRef = useRef<HTMLDivElement>(null);
+
   console.log(sessionData);
 
   useEffect(() => {
@@ -50,9 +54,10 @@ const Pay = ({ sessionData }: Props) => {
 
       const cardConfig: CardConfiguration = {
         showPayButton: true,
-        payButton: (options) => {
-          return <button>Pay</button>;
-        },
+        billingAddressRequired: true,
+        billingAddressMode: "partial",
+        billingAddressRequiredFields: ["postalCode"],
+        billingAddressAllowedCountries: ["US"],
       };
 
       const applePayConfig: ApplePayConfiguration = {
@@ -63,21 +68,35 @@ const Pay = ({ sessionData }: Props) => {
         },
       };
 
+      const googlePayConfig: GooglePayConfiguration = {
+        showPayButton: true,
+        configuration: {
+          gatewayMerchantId: "merchant.com.adyen.test",
+          merchantId: "merchant.com.adyen.test",
+          merchantName: "AdyenOrg",
+          merchantOrigin: "https://adyen.com",
+        },
+      };
+
       const card = new Card(checkout, cardConfig);
       card.mount(containerRef.current as HTMLElement);
 
       const applePay = new ApplePay(checkout, applePayConfig);
       applePay.mount(applePayContainerRef.current as HTMLElement);
+
+      const googlePay = new GooglePay(checkout, googlePayConfig);
+      googlePay.mount(googlePayContainerRef.current as HTMLElement);
     };
 
     initAdyen();
   }, [sessionData]);
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h1>Pay</h1>
 
       <div ref={containerRef}></div>
       <div ref={applePayContainerRef}></div>
+      <div ref={googlePayContainerRef}></div>
     </div>
   );
 };
