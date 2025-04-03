@@ -15,7 +15,7 @@ const PayPage = () => {
           countryCode: "US",
           merchantAccount: "AdyenOrg",
           reference: "test-reference",
-          returnUrl: "http://localhost:3000/pay",
+          returnUrl: "http://localhost:3001/pay",
         }),
       });
 

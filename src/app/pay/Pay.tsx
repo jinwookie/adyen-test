@@ -56,8 +56,8 @@ const Pay = ({ sessionData }: Props) => {
         showPayButton: true,
         billingAddressRequired: true,
         billingAddressMode: "partial",
-        billingAddressRequiredFields: ["postalCode"],
-        billingAddressAllowedCountries: ["US"],
+        billingAddressRequiredFields: ["postalCode", "country"],
+        billingAddressAllowedCountries: ["US", "CA"],
       };
 
       const applePayConfig: ApplePayConfiguration = {

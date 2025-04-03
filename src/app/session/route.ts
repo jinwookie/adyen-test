@@ -23,5 +23,12 @@ export async function POST(request: Request, context: any) {
   console.log(res);
 
   const response = await res.json();
-  return Response.json(response);
+  return Response.json(response, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      "X-Api-Key": process.env.CHECKOUT_API_KEY ?? "",
+    },
+  });
 }
