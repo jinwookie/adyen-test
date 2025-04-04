@@ -1,14 +1,18 @@
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: { type: string } }
+) {
   const fullRequest = {
     merchantAccount: process.env.MERCHANT_ACCOUNT,
   };
 
   let apiKey = process.env.CHECKOUT_API_KEY;
 
-  // if (params.slug.length > 0 && params.slug[0] === "mobile") {
-  //   apiKey = process.env.MOBILE_CHECKOUT_API_KEY;
-  // }
+  if (params.type === "mobile") {
+    apiKey = process.env.MOBILE_CHECKOUT_API_KEY;
+  }
 
+  console.log(apiKey);
   console.log(fullRequest);
 
   const res = await fetch(
