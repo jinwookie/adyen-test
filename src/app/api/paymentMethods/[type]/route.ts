@@ -1,6 +1,6 @@
 export async function POST(
   request: Request,
-  { params }: { params: { type: string } }
+  { params }: { params: Promise<{ type: string }> }
 ) {
   const fullRequest = {
     merchantAccount: process.env.MERCHANT_ACCOUNT,
@@ -8,7 +8,9 @@ export async function POST(
 
   let apiKey = process.env.CHECKOUT_API_KEY;
 
-  if (params.type === "mobile") {
+  const { type } = await params;
+
+  if (type === "mobile") {
     apiKey = process.env.MOBILE_CHECKOUT_API_KEY;
   }
 
