@@ -1,3 +1,4 @@
+// route for create a session for web
 export async function POST(request: Request, context: any) {
   const body = await request.json();
 
@@ -17,7 +18,7 @@ export async function POST(request: Request, context: any) {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
-        "X-Api-Key": process.env.MOBILE_CHECKOUT_API_KEY,
+        "X-Api-Key": process.env.CHECKOUT_API_KEY,
       },
     }
   );
