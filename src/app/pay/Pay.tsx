@@ -49,7 +49,8 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
 
       const checkout = await AdyenCheckout(config);
 
-      const paymentMethods = paymentMethodsResponse.paymentMethods;
+      const paymentMethods = paymentMethodsResponse?.paymentMethods;
+      console.log(paymentMethods);
 
       const cardConfig: CardConfiguration = {
         showPayButton: true,

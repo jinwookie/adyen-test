@@ -39,6 +39,7 @@ export async function POST(
   console.log(res);
 
   const response = await res.json();
+  console.log(response);
   return Response.json(response, {
     status: 200,
     headers: {
