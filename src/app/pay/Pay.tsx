@@ -39,6 +39,12 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
         analytics: {
           enabled: false,
         },
+        onSubmit(state, component, actions) {
+          console.log("submit", state, component, actions);
+          actions.resolve({
+            resultCode: "Authorised",
+          });
+        },
         onPaymentCompleted: (state, component) => {
           console.log("completed", state);
         },
