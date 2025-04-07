@@ -1,10 +1,12 @@
+import { NextRequest } from "next/server";
+
 export async function POST(
-  request: Request,
-  {
-    params,
-    searchParams,
-  }: { params: Promise<{ type: string }>; searchParams: Promise<{ v: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ type: string }> }
 ) {
+  const searchParams = request.nextUrl.searchParams;
+  const v = searchParams.get("v"); // Get the value of the 'query' parameter
+
   const fullRequest = {
     merchantAccount: process.env.MERCHANT_ACCOUNT,
   };
@@ -22,11 +24,11 @@ export async function POST(
     fullRequest.merchantAccount = process.env.TEST_MERCHANT_ACCOUNT;
   }
 
-  const { v } = await searchParams;
   const version = v ?? process.env.CHECKOUT_API_VERSION;
 
   console.log(apiKey);
   console.log(fullRequest);
+  console.log(version);
 
   const res = await fetch(
     `https://checkout-test.adyen.com/${version}/paymentMethods`,
