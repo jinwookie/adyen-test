@@ -4,32 +4,25 @@ import { useEffect, useState } from "react";
 import Pay from "./Pay";
 
 const PayPage = () => {
-  const [sessionData, setSessionData] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState(null);
 
   useEffect(() => {
-    const getSession = async () => {
-      const res = await fetch(`/session`, {
+    const getPaymentMethods = async () => {
+      const res = await fetch(`/api/paymentMethods/test`, {
         method: "POST",
-        body: JSON.stringify({
-          amount: { value: 1000, currency: "USD" },
-          countryCode: "US",
-          merchantAccount: "AdyenOrg",
-          reference: "test-reference",
-          returnUrl: "http://localhost:3001/pay",
-        }),
       });
 
       const data = await res.json();
-      setSessionData(data);
+      setPaymentMethods(data);
     };
-    getSession();
+    getPaymentMethods();
   }, []);
 
-  if (!sessionData) {
+  if (!paymentMethods) {
     return <div>Loading...</div>;
   }
 
-  return <Pay sessionData={sessionData} />;
+  return <Pay paymentMethodsResponse={paymentMethods} />;
 };
 
 export default PayPage;

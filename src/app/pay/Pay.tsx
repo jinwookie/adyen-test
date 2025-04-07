@@ -14,25 +14,22 @@ import "@adyen/adyen-web/styles/adyen.css";
 import { useEffect, useRef } from "react";
 
 type Props = {
-  sessionData: any;
+  paymentMethodsResponse: any;
 };
 
-const Pay = ({ sessionData }: Props) => {
+const Pay = ({ paymentMethodsResponse }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const applePayContainerRef = useRef<HTMLDivElement>(null);
   const googlePayContainerRef = useRef<HTMLDivElement>(null);
 
-  console.log(sessionData);
+  console.log(paymentMethodsResponse);
 
   useEffect(() => {
     const initAdyen = async () => {
       const config: CoreConfiguration = {
         environment: "test",
-        session: {
-          id: sessionData.id,
-          sessionData: sessionData.sessionData,
-        },
-        clientKey: process.env.NEXT_PUBLIC_CHECKOUT_API_KEY,
+        paymentMethodsResponse,
+        clientKey: process.env.NEXT_PUBLIC_TEST_CHECKOUT_API_KEY,
         countryCode: "US",
         amount: {
           value: 1000,
@@ -52,8 +49,11 @@ const Pay = ({ sessionData }: Props) => {
 
       const checkout = await AdyenCheckout(config);
 
+      const paymentMethods = paymentMethodsResponse.paymentMethods;
+
       const cardConfig: CardConfiguration = {
         showPayButton: true,
+        ...paymentMethods.card,
         billingAddressRequired: true,
         billingAddressMode: "partial",
         billingAddressRequiredFields: ["postalCode", "country"],
@@ -62,20 +62,22 @@ const Pay = ({ sessionData }: Props) => {
 
       const applePayConfig: ApplePayConfiguration = {
         showPayButton: true,
-        configuration: {
-          merchantName: "AdyenOrg",
-          merchantId: "merchant.com.adyen.test",
-        },
+        ...paymentMethods.applePay,
+        // configuration: {
+        //   merchantName: "AdyenOrg",
+        //   merchantId: "merchant.com.adyen.test",
+        // },
       };
 
       const googlePayConfig: GooglePayConfiguration = {
         showPayButton: true,
-        configuration: {
-          gatewayMerchantId: "merchant.com.adyen.test",
-          merchantId: "merchant.com.adyen.test",
-          merchantName: "AdyenOrg",
-          merchantOrigin: "https://adyen.com",
-        },
+        ...paymentMethods.googlePay,
+        // configuration: {
+        //   gatewayMerchantId: "merchant.com.adyen.test",
+        //   merchantId: "merchant.com.adyen.test",
+        //   merchantName: "AdyenOrg",
+        //   merchantOrigin: "https://adyen.com",
+        // },
       };
 
       const card = new Card(checkout, cardConfig);
@@ -89,7 +91,7 @@ const Pay = ({ sessionData }: Props) => {
     };
 
     initAdyen();
-  }, [sessionData]);
+  }, [paymentMethodsResponse]);
   return (
     <div className="flex flex-col gap-4">
       <h1>Pay</h1>
