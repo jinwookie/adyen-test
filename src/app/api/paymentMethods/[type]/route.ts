@@ -1,6 +1,9 @@
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ type: string }> }
+  {
+    params,
+    searchParams,
+  }: { params: Promise<{ type: string }>; searchParams: Promise<{ v: string }> }
 ) {
   const fullRequest = {
     merchantAccount: process.env.MERCHANT_ACCOUNT,
@@ -19,11 +22,14 @@ export async function POST(
     fullRequest.merchantAccount = process.env.TEST_MERCHANT_ACCOUNT;
   }
 
+  const { v } = await searchParams;
+  const version = v ?? process.env.CHECKOUT_API_VERSION;
+
   console.log(apiKey);
   console.log(fullRequest);
 
   const res = await fetch(
-    `https://checkout-test.adyen.com/${process.env.CHECKOUT_API_VERSION}/paymentMethods`,
+    `https://checkout-test.adyen.com/${version}/paymentMethods`,
     {
       method: "POST",
       body: JSON.stringify(fullRequest),
