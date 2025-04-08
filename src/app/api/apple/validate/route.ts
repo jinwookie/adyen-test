@@ -1,15 +1,19 @@
 export const POST = async (request: Request) => {
-  const body = await request.json();
+  const requestBody = await request.json();
+  console.log(requestBody);
+
+  const body = {
+    merchantIdentifier: process.env.APPLE_MERCHANT_IDENTIFIER,
+    displayName: "Bilt Rewards",
+    initiative: "web",
+    initiativeContext: process.env.APPLE_DOMAIN_NAME,
+  };
+
   console.log(body);
 
-  const response = await fetch(body.validationURL, {
+  const response = await fetch(requestBody.validationURL, {
     method: "POST",
-    body: JSON.stringify({
-      merchantIdentifier: process.env.APPLE_MERCHANT_IDENTIFIER,
-      displayName: "Bilt Rewards",
-      initiative: "web",
-      initiativeContext: process.env.APPLE_DOMAIN_NAME,
-    }),
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
