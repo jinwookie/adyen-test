@@ -86,6 +86,7 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
             const data = await response.json();
             resolve(data);
           } catch (error) {
+            console.error(error);
             reject(error);
           }
         },
