@@ -17,6 +17,7 @@ export async function POST(
 
   if (type === "mobile") {
     apiKey = process.env.MOBILE_CHECKOUT_API_KEY;
+    fullRequest.merchantAccount = process.env.MOBILE_MERCHANT_ACCOUNT;
   }
 
   if (type === "test") {

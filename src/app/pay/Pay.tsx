@@ -39,8 +39,15 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
         analytics: {
           enabled: false,
         },
-        onSubmit(state, component, actions) {
+        async onSubmit(state, component, actions) {
           console.log("submit", state, component, actions);
+          fetch("/api/payment", {
+            method: "POST",
+            body: JSON.stringify({
+              paymentMethod: state.data.paymentMethod,
+            }),
+          });
+
           actions.resolve({
             resultCode: "Authorised",
           });
@@ -70,26 +77,26 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
       const applePayConfig: ApplePayConfiguration = {
         showPayButton: true,
         ...paymentMethods.applePay,
-        // configuration: {
-        //   merchantName: "AdyenOrg",
-        //   merchantId: "merchant.com.adyen.test",
-        // },
-        onValidateMerchant: async (resolve, reject, validationURL) => {
-          try {
-            const response = await fetch("/api/apple/validate", {
-              method: "POST",
-              body: JSON.stringify({ validationURL }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            const data = await response.json();
-            resolve(data);
-          } catch (error) {
-            console.error(error);
-            reject(error);
-          }
+        configuration: {
+          merchantName: "AdyenOrg",
+          merchantId: "merchant.com.adyen.test",
         },
+        // onValidateMerchant: async (resolve, reject, validationURL) => {
+        //   try {
+        //     const response = await fetch("/api/apple/validate", {
+        //       method: "POST",
+        //       body: JSON.stringify({ validationURL }),
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     });
+        //     const data = await response.json();
+        //     resolve(data);
+        //   } catch (error) {
+        //     console.error(error);
+        //     reject(error);
+        //   }
+        // },
       };
 
       const googlePayConfig: GooglePayConfiguration = {

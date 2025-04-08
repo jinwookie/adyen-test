@@ -8,7 +8,7 @@ const PayPage = () => {
 
   useEffect(() => {
     const getPaymentMethods = async () => {
-      const res = await fetch(`/api/paymentMethods/test`, {
+      const res = await fetch(`/api/paymentMethods/web`, {
         method: "POST",
       });
 
