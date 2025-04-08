@@ -1,7 +1,8 @@
 export const POST = async (request: Request) => {
-  const { validationUrl } = await request.json();
+  const body = await request.json();
+  console.log(body);
 
-  const response = await fetch(validationUrl, {
+  const response = await fetch(body.validationURL, {
     method: "POST",
     body: JSON.stringify({
       merchantIdentifier: process.env.APPLE_MERCHANT_IDENTIFIER,
