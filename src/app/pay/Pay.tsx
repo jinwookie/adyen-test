@@ -75,15 +75,19 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
         //   merchantId: "merchant.com.adyen.test",
         // },
         onValidateMerchant: async (resolve, reject, validationURL) => {
-          const response = await fetch("/api/apple/validate", {
-            method: "POST",
-            body: JSON.stringify({ validationURL }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await response.json();
-          resolve(data);
+          try {
+            const response = await fetch("/api/apple/validate", {
+              method: "POST",
+              body: JSON.stringify({ validationURL }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const data = await response.json();
+            resolve(data);
+          } catch (error) {
+            reject(error);
+          }
         },
       };
 
