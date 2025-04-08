@@ -17,7 +17,7 @@ export const POST = async (request: Request) => {
 
   console.log(response);
   if (!response.ok) {
-    const error = await response.json();
+    const error = await response.text();
     console.error(error);
     return Response.json(error, {
       status: 400,
