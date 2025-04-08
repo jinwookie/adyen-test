@@ -29,7 +29,7 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
       const config: CoreConfiguration = {
         environment: "test",
         paymentMethodsResponse,
-        clientKey: process.env.NEXT_PUBLIC_TEST_CHECKOUT_API_KEY,
+        clientKey: process.env.NEXT_PUBLIC_CHECKOUT_API_KEY,
         countryCode: "US",
         amount: {
           value: 1000,
@@ -74,6 +74,17 @@ const Pay = ({ paymentMethodsResponse }: Props) => {
         //   merchantName: "AdyenOrg",
         //   merchantId: "merchant.com.adyen.test",
         // },
+        onValidateMerchant: async (resolve, reject, validationURL) => {
+          const response = await fetch(validationURL, {
+            method: "POST",
+            body: JSON.stringify({ validationURL }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+          resolve(data);
+        },
       };
 
       const googlePayConfig: GooglePayConfiguration = {
