@@ -9,6 +9,9 @@ export const POST = async (request: Request) => {
       initiative: "web",
       initiativeContext: process.env.APPLE_DOMAIN_NAME,
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   console.log(response);
